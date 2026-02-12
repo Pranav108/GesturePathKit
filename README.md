@@ -174,6 +174,149 @@ public enum GesturePathKitInteractionCoordinateAlignment {
 
 ---
 
+## 🤖 AI Agent Integration Prompt
+
+Want your AI coding assistant (Copilot, Cursor, Claude, etc.) to integrate GesturePathKit for you? Copy the prompt below (use the 📋 button on the top-right of the code block) and paste it directly into your AI agent.
+
+<details>
+<summary><b>📋 Click to expand the prompt</b></summary>
+
+```text
+Integrate GesturePathKit — a debug-only iOS touch-visualisation SDK — into my project.
+Follow these steps exactly.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+STEP 1 — Add the Swift Package dependency
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Add the following SPM dependency using the latest available version:
+
+    https://github.com/Pranav108/GesturePathKit.git
+
+If the project uses a Package.swift, add:
+
+    dependencies: [
+        .package(url: "https://github.com/Pranav108/GesturePathKit.git", from: "<latest version>")
+    ]
+
+and include "GesturePathKit" in the relevant target's dependencies array.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+STEP 2 — Integrate in the app's window setup
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+CASE A — The app uses a SceneDelegate:
+
+Open SceneDelegate.swift and update scene(_:willConnectTo:options:):
+
+    import UIKit
+    #if DEBUG
+    import GesturePathKit
+    #endif
+
+    class SceneDelegate: UIResponder, UIWindowSceneDelegate {
+
+        var window: UIWindow?
+
+        func scene(
+            _ scene: UIScene,
+            willConnectTo session: UISceneSession,
+            options connectionOptions: UIScene.ConnectionOptions
+        ) {
+            guard let windowScene = scene as? UIWindowScene else { return }
+
+            #if DEBUG
+            // Optional: customise the overlay appearance
+            // let config = GesturePathKitConfiguration(
+            //     gradientStartColor: .systemPurple,
+            //     gradientEndColor: .systemOrange,
+            //     interactionCoordinateAlignment: .bottomLeft
+            // )
+            let window = GesturePathTrackingWindow(windowScene: windowScene)
+            // To use a custom config pass it:
+            // let window = GesturePathTrackingWindow(windowScene: windowScene, configuration: config)
+            #else
+            let window = UIWindow(windowScene: windowScene)
+            #endif
+
+            // ── Add your custom setup below ─────────────────
+            // Set your root view controller and any other window configuration here
+            window.rootViewController = UINavigationController(
+                rootViewController: YourViewController()
+            )
+            // ────────────────────────────────────────────────
+
+            window.makeKeyAndVisible()
+            self.window = window
+        }
+    }
+
+──────────────────────────────────────────
+
+CASE B — The app uses only an AppDelegate (no SceneDelegate):
+
+Open AppDelegate.swift and update application(_:didFinishLaunchingWithOptions:):
+
+    import UIKit
+    #if DEBUG
+    import GesturePathKit
+    #endif
+
+    @main
+    class AppDelegate: UIResponder, UIApplicationDelegate {
+
+        var window: UIWindow?
+
+        func application(
+            _ application: UIApplication,
+            didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
+        ) -> Bool {
+
+            let plainWindow = UIWindow(frame: UIScreen.main.bounds)
+
+            // ── Add your custom setup below ─────────────────
+            // Set your root view controller and any other window configuration here
+            plainWindow.rootViewController = UINavigationController(
+                rootViewController: YourViewController()
+            )
+            // ────────────────────────────────────────────────
+
+            #if DEBUG
+            // Optional: customise the overlay appearance
+            // let config = GesturePathKitConfiguration(
+            //     gradientStartColor: .systemPurple,
+            //     gradientEndColor: .systemOrange,
+            //     interactionCoordinateAlignment: .bottomLeft
+            // )
+            let trackingWindow = GesturePathTrackingWindow(window: plainWindow)
+            // To use a custom config pass it:
+            // let trackingWindow = GesturePathTrackingWindow(window: plainWindow, configuration: config)
+            trackingWindow.makeKeyAndVisible()
+            self.window = trackingWindow
+            #else
+            plainWindow.makeKeyAndVisible()
+            self.window = plainWindow
+            #endif
+
+            return true
+        }
+    }
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+IMPORTANT RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+• The "import GesturePathKit" statement and ALL SDK usage MUST be wrapped
+  inside #if DEBUG ... #endif so nothing ships in release builds.
+• Replace YourViewController() with the app's actual root view controller.
+• Do NOT modify any other existing app logic — the rest of the app should
+  work exactly as before.
+```
+
+</details>
+
+---
+
 ## 📁 Project Structure
 
 ```
