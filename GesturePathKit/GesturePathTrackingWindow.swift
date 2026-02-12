@@ -47,6 +47,28 @@ public final class GesturePathTrackingWindow: UIWindow {
         setupOverlay()
     }
     
+    /// Creates a tracking window by adopting the properties of an existing `UIWindow`.
+    ///
+    /// Use this initializer for apps that don't use a scene delegate and already have
+    /// a `UIWindow` instance (e.g. from a storyboard or `AppDelegate.window`).
+    /// The existing window's `frame`, `rootViewController`, `windowLevel`,
+    /// and `windowScene` (if available) are transferred to this tracking window.
+    ///
+    /// - Parameters:
+    ///   - window: The existing `UIWindow` whose properties will be adopted.
+    ///   - configuration: Appearance configuration for the overlay. Uses defaults if omitted.
+    public init(window: UIWindow, configuration: GesturePathKitConfiguration = .init()) {
+        self.overlayView = TouchOverlayView(configuration: configuration)
+        if let scene = window.windowScene {
+            super.init(windowScene: scene)
+        } else {
+            super.init(frame: window.frame)
+        }
+        self.rootViewController = window.rootViewController
+        self.windowLevel = window.windowLevel
+        setupOverlay()
+    }
+    
     @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")

@@ -7,26 +7,34 @@
 //
 
 import UIKit
+import GesturePathKit
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
+
+    var window: UIWindow?
 
     func application(
         _ application: UIApplication,
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
     ) -> Bool {
+        // Create a regular UIWindow first, then wrap it with GesturePathTrackingWindow
+        let plainWindow = UIWindow(frame: UIScreen.main.bounds)
+        plainWindow.rootViewController = UINavigationController(
+            rootViewController: ViewController()
+        )
+
+        let config = GesturePathKitConfiguration(
+            gradientStartColor: .systemPurple,
+            gradientEndColor: .systemOrange,
+            interactionCoordinateAlignment: .bottomLeft
+        )
+        let trackingWindow = GesturePathTrackingWindow(
+            window: plainWindow,
+            configuration: config
+        )
+        trackingWindow.makeKeyAndVisible()
+        window = trackingWindow
         return true
-    }
-
-    // MARK: UISceneSession Lifecycle
-
-    func application(
-        _ application: UIApplication,
-        configurationForConnecting connectingSceneSession: UISceneSession,
-        options: UIScene.ConnectionOptions
-    ) -> UISceneConfiguration {
-        let config = UISceneConfiguration(name: "Default Configuration", sessionRole: connectingSceneSession.role)
-        config.delegateClass = SceneDelegate.self
-        return config
     }
 }
