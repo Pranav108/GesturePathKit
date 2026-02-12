@@ -5,7 +5,8 @@ A lightweight, debug-only iOS SDK that visualizes touch gestures in real time â€
 
 > **Debug-only** â€” All code is wrapped in `#if DEBUG`, so it is completely stripped from release builds. Zero impact on your production app.
 
-![GesturePathKit Demo](GesturePathKit/GesturePathKit.docc/Resources/demo.png)
+<img width="300" height="700" alt="SampelScreenShot" src="https://github.com/user-attachments/assets/fb3dcf57-e089-4574-baf5-7eaf164b6f17" />
+
 
 ---
 
